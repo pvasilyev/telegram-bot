@@ -75,7 +75,7 @@ jobs:
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
-        task-definition: ${{ steps.render-web-container.outputs.task-definition }}
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: tgbot-webhook-service
         cluster: tgbot-springboot-cluster
         wait-for-service-stability: true
