@@ -2,7 +2,7 @@
   "family": "",
   "taskRoleArn": "",
   "executionRoleArn": "",
-  "networkMode": "bridge",
+  "networkMode": "awsvpc",
   "containerDefinitions": [
     {
       "name": "tgbot-webhook",
@@ -20,7 +20,7 @@
         {
           "containerPort": 0,
           "hostPort": 0,
-          "protocol": "udp"
+          "protocol": "tcp"
         }
       ],
       "essential": true,
@@ -123,13 +123,13 @@
       },
       "ulimits": [
         {
-          "name": "cpu",
+          "name": "rss",
           "softLimit": 0,
           "hardLimit": 0
         }
       ],
       "logConfiguration": {
-        "logDriver": "gelf",
+        "logDriver": "awslogs",
         "options": {
           "KeyName": ""
         },
@@ -158,11 +158,11 @@
       "resourceRequirements": [
         {
           "value": "",
-          "type": "GPU"
+          "type": "InferenceAccelerator"
         }
       ],
       "firelensConfiguration": {
-        "type": "fluentd",
+        "type": "fluentbit",
         "options": {
           "KeyName": ""
         }
@@ -176,7 +176,7 @@
         "sourcePath": ""
       },
       "dockerVolumeConfiguration": {
-        "scope": "shared",
+        "scope": "task",
         "autoprovision": true,
         "driver": "",
         "driverOpts": {
@@ -205,8 +205,8 @@
       "value": ""
     }
   ],
-  "pidMode": "host",
-  "ipcMode": "none",
+  "pidMode": "task",
+  "ipcMode": "host",
   "proxyConfiguration": {
     "type": "APPMESH",
     "containerName": "",
