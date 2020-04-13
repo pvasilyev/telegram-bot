@@ -12,4 +12,4 @@ COPY --from=MAVEN_BUILD /build/target/telegram-bot-0.0.1-SNAPSHOT.jar /app/
 
 ENTRYPOINT ["java", "-jar", "/app/telegram-bot-0.0.1-SNAPSHOT.jar"]
 
-EXPOSE 8080
+EXPOSE 8080 8787
