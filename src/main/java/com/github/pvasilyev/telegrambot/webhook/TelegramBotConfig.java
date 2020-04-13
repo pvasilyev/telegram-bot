@@ -9,7 +9,6 @@ import com.amazonaws.services.secretsmanager.model.InternalServiceErrorException
 import com.amazonaws.services.secretsmanager.model.InvalidParameterException;
 import com.amazonaws.services.secretsmanager.model.InvalidRequestException;
 import com.amazonaws.services.secretsmanager.model.ResourceNotFoundException;
-import com.amazonaws.util.EC2MetadataUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pvasilyev.telegrambot.model.HelperBotConfiguration;
@@ -28,11 +27,10 @@ public class TelegramBotConfig {
 
     private static final String CALLBACK_PREFIX = "callback/";
 
-    @Bean
     public TelegramBotsApi createTelegramBots() throws Exception {
         ApiContextInitializer.init();
 
-        final String localIp = EC2MetadataUtils.getInstanceInfo().getPrivateIp();
+        final String localIp = "localhost";
         System.err.println(localIp);
         final HelperBotConfiguration helperBotConfiguration = retrieveBotConfiguration();
         final String secretToken = helperBotConfiguration.getPathToken();
@@ -58,7 +56,7 @@ public class TelegramBotConfig {
                 .withRegion(region)
                 .build();
         final String secret;
-        GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest()
+        final GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest()
                 .withSecretId(secretName);
         final GetSecretValueResult getSecretValueResult;
 
@@ -81,7 +79,6 @@ public class TelegramBotConfig {
         throw new RuntimeException("Unable to retrieve secret from AWS");
     }
 
-    @Bean
     public PavelsLittleHelperBot pavelsBot(final HelperBotConfiguration helperBotConfiguration) {
         return new PavelsLittleHelperBot(helperBotConfiguration);
     }
