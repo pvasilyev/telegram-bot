@@ -1,226 +1,134 @@
 {
-  "family": "",
-  "taskRoleArn": "",
-  "executionRoleArn": "",
-  "networkMode": "awsvpc",
+  "ipcMode": null,
+  "executionRoleArn": "arn:aws:iam::571901509392:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
-      "name": "tgbot-container",
-      "image": "",
-      "repositoryCredentials": {
-        "credentialsParameter": ""
-      },
-      "cpu": 0,
-      "memory": 0,
-      "memoryReservation": 0,
-      "links": [
-        ""
-      ],
-      "portMappings": [
-        {
-          "containerPort": 0,
-          "hostPort": 0,
-          "protocol": "tcp"
-        }
-      ],
-      "essential": true,
-      "entryPoint": [
-        ""
-      ],
-      "command": [
-        ""
-      ],
-      "environment": [
-        {
-          "name": "",
-          "value": ""
-        }
-      ],
-      "mountPoints": [
-        {
-          "sourceVolume": "",
-          "containerPath": "",
-          "readOnly": true
-        }
-      ],
-      "volumesFrom": [
-        {
-          "sourceContainer": "",
-          "readOnly": true
-        }
-      ],
-      "linuxParameters": {
-        "capabilities": {
-          "add": [
-            ""
-          ],
-          "drop": [
-            ""
-          ]
-        },
-        "devices": [
-          {
-            "hostPath": "",
-            "containerPath": "",
-            "permissions": [
-              "read"
-            ]
-          }
-        ],
-        "initProcessEnabled": true,
-        "sharedMemorySize": 0,
-        "tmpfs": [
-          {
-            "containerPath": "",
-            "size": 0,
-            "mountOptions": [
-              ""
-            ]
-          }
-        ],
-        "maxSwap": 0,
-        "swappiness": 0
-      },
-      "secrets": [
-        {
-          "name": "",
-          "valueFrom": ""
-        }
-      ],
-      "dependsOn": [
-        {
-          "containerName": "",
-          "condition": "START"
-        }
-      ],
-      "startTimeout": 0,
-      "stopTimeout": 0,
-      "hostname": "",
-      "user": "",
-      "workingDirectory": "",
-      "disableNetworking": true,
-      "privileged": true,
-      "readonlyRootFilesystem": true,
-      "dnsServers": [
-        ""
-      ],
-      "dnsSearchDomains": [
-        ""
-      ],
-      "extraHosts": [
-        {
-          "hostname": "",
-          "ipAddress": ""
-        }
-      ],
-      "dockerSecurityOptions": [
-        ""
-      ],
-      "interactive": true,
-      "pseudoTerminal": true,
-      "dockerLabels": {
-        "KeyName": ""
-      },
-      "ulimits": [
-        {
-          "name": "rss",
-          "softLimit": 0,
-          "hardLimit": 0
-        }
-      ],
+      "dnsSearchDomains": null,
       "logConfiguration": {
         "logDriver": "awslogs",
+        "secretOptions": null,
         "options": {
-          "KeyName": ""
-        },
-        "secretOptions": [
-          {
-            "name": "",
-            "valueFrom": ""
-          }
-        ]
+          "awslogs-group": "/ecs/tgbot-deployment",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
       },
-      "healthCheck": {
-        "command": [
-          ""
-        ],
-        "interval": 0,
-        "timeout": 0,
-        "retries": 0,
-        "startPeriod": 0
-      },
-      "systemControls": [
+      "entryPoint": [],
+      "portMappings": [
         {
-          "namespace": "",
-          "value": ""
+          "hostPort": 8080,
+          "protocol": "tcp",
+          "containerPort": 8080
+        },
+        {
+          "hostPort": 8787,
+          "protocol": "tcp",
+          "containerPort": 8787
         }
       ],
-      "resourceRequirements": [
-        {
-          "value": "",
-          "type": "InferenceAccelerator"
-        }
-      ],
-      "firelensConfiguration": {
-        "type": "fluentbit",
-        "options": {
-          "KeyName": ""
-        }
-      }
+      "command": [],
+      "linuxParameters": null,
+      "cpu": 1,
+      "environment": [],
+      "resourceRequirements": null,
+      "ulimits": null,
+      "dnsServers": null,
+      "mountPoints": [],
+      "workingDirectory": null,
+      "secrets": null,
+      "dockerSecurityOptions": null,
+      "memory": null,
+      "memoryReservation": null,
+      "volumesFrom": [],
+      "stopTimeout": null,
+      "image": "571901509392.dkr.ecr.us-east-1.amazonaws.com/tgbot-webhook-repository",
+      "startTimeout": null,
+      "firelensConfiguration": null,
+      "dependsOn": null,
+      "disableNetworking": null,
+      "interactive": null,
+      "healthCheck": null,
+      "essential": true,
+      "links": [],
+      "hostname": null,
+      "extraHosts": null,
+      "pseudoTerminal": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "systemControls": null,
+      "privileged": null,
+      "name": "tgbot-container"
     }
   ],
-  "volumes": [
+  "placementConstraints": [],
+  "memory": "512",
+  "taskRoleArn": "arn:aws:iam::571901509392:role/ecsTaskExecutionRole",
+  "compatibilities": [
+    "EC2",
+    "FARGATE"
+  ],
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:571901509392:task-definition/tgbot-deployment:4",
+  "family": "tgbot-deployment",
+  "requiresAttributes": [
     {
-      "name": "",
-      "host": {
-        "sourcePath": ""
-      },
-      "dockerVolumeConfiguration": {
-        "scope": "task",
-        "autoprovision": true,
-        "driver": "",
-        "driverOpts": {
-          "KeyName": ""
-        },
-        "labels": {
-          "KeyName": ""
-        }
-      }
-    }
-  ],
-  "placementConstraints": [
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+    },
     {
-      "type": "memberOf",
-      "expression": ""
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.execution-role-awslogs"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.task-iam-role"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.task-eni"
     }
   ],
+  "pidMode": null,
   "requiresCompatibilities": [
     "FARGATE"
   ],
-  "cpu": "",
-  "memory": "",
-  "tags": [
-    {
-      "key": "",
-      "value": ""
-    }
-  ],
-  "pidMode": "task",
-  "ipcMode": "host",
-  "proxyConfiguration": {
-    "type": "APPMESH",
-    "containerName": "",
-    "properties": [
-      {
-        "name": "",
-        "value": ""
-      }
-    ]
-  },
-  "inferenceAccelerators": [
-    {
-      "deviceName": "",
-      "deviceType": ""
-    }
-  ]
+  "networkMode": "awsvpc",
+  "cpu": "256",
+  "revision": 4,
+  "status": "ACTIVE",
+  "inferenceAccelerators": null,
+  "proxyConfiguration": null,
+  "volumes": []
 }
