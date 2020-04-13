@@ -5,7 +5,7 @@
   "networkMode": "awsvpc",
   "containerDefinitions": [
     {
-      "name": "tgbot-webhook",
+      "name": "tgbot-container",
       "image": "",
       "repositoryCredentials": {
         "credentialsParameter": ""
