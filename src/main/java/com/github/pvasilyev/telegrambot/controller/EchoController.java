@@ -14,6 +14,7 @@ import java.time.Instant;
 public class EchoController {
     @RequestMapping("/v1")
     public String echo() {
+        System.err.println("Invoked echo");
         return "Server Time is: " + Instant.now();
     }
 }
