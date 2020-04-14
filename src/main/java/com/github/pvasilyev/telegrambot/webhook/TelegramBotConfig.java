@@ -27,6 +27,7 @@ public class TelegramBotConfig {
 
     private static final String CALLBACK_PREFIX = "callback/";
 
+    @Bean
     public TelegramBotsApi createTelegramBots() throws Exception {
         ApiContextInitializer.init();
 
@@ -79,6 +80,7 @@ public class TelegramBotConfig {
         throw new RuntimeException("Unable to retrieve secret from AWS");
     }
 
+    @Bean
     public PavelsLittleHelperBot pavelsBot(final HelperBotConfiguration helperBotConfiguration) {
         return new PavelsLittleHelperBot(helperBotConfiguration);
     }
