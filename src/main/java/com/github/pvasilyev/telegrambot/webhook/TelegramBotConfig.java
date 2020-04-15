@@ -18,6 +18,9 @@ import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
 /**
  * @author pvasilyev
  * @since 12 Apr 2020
@@ -31,7 +34,11 @@ public class TelegramBotConfig {
     public TelegramBotsApi createTelegramBots() throws Exception {
         ApiContextInitializer.init();
 
-        final String localIp = "localhost";
+        final String localIp;
+        try (final DatagramSocket socket = new DatagramSocket()) {
+            socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+            localIp = socket.getLocalAddress().getHostAddress();
+        }
         System.err.println(localIp);
         final HelperBotConfiguration helperBotConfiguration = retrieveBotConfiguration();
         final String secretToken = helperBotConfiguration.getPathToken();
@@ -53,7 +60,7 @@ public class TelegramBotConfig {
     private HelperBotConfiguration retrieveBotConfiguration() {
         final String secretName = "tgbothelper-configuration";
         final String region = "us-east-1";
-        final AWSSecretsManager client  = AWSSecretsManagerClientBuilder.standard()
+        final AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
                 .withRegion(region)
                 .build();
         final String secret;
