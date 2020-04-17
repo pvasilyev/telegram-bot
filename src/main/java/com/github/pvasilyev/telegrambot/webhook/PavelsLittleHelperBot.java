@@ -1,6 +1,9 @@
 package com.github.pvasilyev.telegrambot.webhook;
 
 import com.github.pvasilyev.telegrambot.model.HelperBotConfiguration;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,19 +18,18 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author pvasilyev
  * @since 08 Apr 2020
  */
+@Slf4j
+@RequiredArgsConstructor
 public class PavelsLittleHelperBot extends TelegramWebhookBot {
 
     private final AtomicInteger counter = new AtomicInteger();
 
+    @NonNull
     private final HelperBotConfiguration configuration;
-
-    public PavelsLittleHelperBot(final HelperBotConfiguration configuration) {
-        this.configuration = configuration;
-    }
 
     @Override
     public BotApiMethod onWebhookUpdateReceived(final Update update) {
-        System.err.println("Received stuff!!! " + update);
+        log.info("Received following update: {}", update);
         if (update.getMessage() != null) {
             final Message message = update.getMessage();
             if (message.getChat() != null) {

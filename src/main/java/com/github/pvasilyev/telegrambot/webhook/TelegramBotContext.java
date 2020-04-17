@@ -2,16 +2,12 @@ package com.github.pvasilyev.telegrambot.webhook;
 
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
-import com.amazonaws.services.secretsmanager.model.DecryptionFailureException;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueRequest;
 import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
-import com.amazonaws.services.secretsmanager.model.InternalServiceErrorException;
-import com.amazonaws.services.secretsmanager.model.InvalidParameterException;
-import com.amazonaws.services.secretsmanager.model.InvalidRequestException;
-import com.amazonaws.services.secretsmanager.model.ResourceNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pvasilyev.telegrambot.model.HelperBotConfiguration;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -25,8 +21,9 @@ import java.net.InetAddress;
  * @author pvasilyev
  * @since 12 Apr 2020
  */
+@Slf4j
 @Configuration
-public class TelegramBotConfig {
+public class TelegramBotContext {
 
     private static final String CALLBACK_PREFIX = "callback/";
 
@@ -39,7 +36,7 @@ public class TelegramBotConfig {
             socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
             localIp = socket.getLocalAddress().getHostAddress();
         }
-        System.err.println(localIp);
+        log.info("For telegram webhook going to use following local ip: {}", localIp);
         final HelperBotConfiguration helperBotConfiguration = retrieveBotConfiguration();
         final String secretToken = helperBotConfiguration.getPathToken();
         final TelegramBotsApi telegramBotsApi = new TelegramBotsApi(
@@ -50,10 +47,10 @@ public class TelegramBotConfig {
             telegramBotsApi.registerBot(bot);
 
             return telegramBotsApi;
-        } catch (TelegramApiException e) {
-            System.err.println("AAAAAA!!!111");
-            e.printStackTrace();
-            throw new RuntimeException("AAAAAA", e);
+        } catch (final TelegramApiException e) {
+            final String message = "Unable to bootstrap config due to telegram error";
+            log.error(message, e);
+            throw new RuntimeException(message, e);
         }
     }
 
@@ -66,13 +63,7 @@ public class TelegramBotConfig {
         final String secret;
         final GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest()
                 .withSecretId(secretName);
-        final GetSecretValueResult getSecretValueResult;
-
-        try {
-            getSecretValueResult = client.getSecretValue(getSecretValueRequest);
-        } catch (DecryptionFailureException | InternalServiceErrorException | InvalidParameterException | InvalidRequestException | ResourceNotFoundException e) {
-            throw e;
-        }
+        final GetSecretValueResult getSecretValueResult = client.getSecretValue(getSecretValueRequest);
 
         // Decrypts secret using the associated KMS CMK.
         // Depending on whether the secret is a string or binary, one of these fields will be populated.
