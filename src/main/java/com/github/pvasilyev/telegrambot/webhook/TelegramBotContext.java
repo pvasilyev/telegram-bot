@@ -80,7 +80,9 @@ public class TelegramBotContext {
 
     @Bean
     public PavelsLittleHelperBot pavelsBot(final HelperBotConfiguration helperBotConfiguration) {
-        return new PavelsLittleHelperBot(helperBotConfiguration);
+        return new PavelsLittleHelperBot(
+                helperBotConfiguration,
+                new RandomNumberReplier());
     }
 
     @Bean
