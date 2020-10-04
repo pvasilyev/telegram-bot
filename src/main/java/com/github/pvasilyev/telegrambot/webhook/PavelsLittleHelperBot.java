@@ -43,30 +43,27 @@ public class PavelsLittleHelperBot extends TelegramWebhookBot {
             final Message message = update.getMessage();
             if (message.getChat() != null) {
                 final Chat chat = message.getChat();
-                if (!StringUtils.isBlank(message.getText())
-                        && message.getText().startsWith("/random")
+                final String messageText = message.getText();
+                if (!StringUtils.isBlank(messageText)
+                        && messageText.startsWith("/random")
                         && message.getEntities() != null) {
                     return message.getEntities().stream()
                             .filter(m -> EntityType.BOTCOMMAND.equals(m.getType()))
                             .findFirst()
                             .map(messageEntity -> {
-                                if (StringUtils.isBlank(messageEntity.getText())) {
+                                final String actualText = StringUtils.isBlank(messageEntity.getText())
+                                        ? messageText.substring(messageEntity.getLength())
+                                        : messageEntity.getText();
+                                final Pattern pattern = Pattern.compile("\\d+");
+                                final Matcher matcher = pattern.matcher(actualText.trim());
+                                final List<Integer> list = extractInts(matcher);
+                                if (list.size() <= 1) {
                                     return getDefaultRandomNumber();
-                                } else {
-                                    final Pattern p = Pattern.compile("\\d+");
-                                    final Matcher m = p.matcher(messageEntity.getText());
-                                    final List<Integer> list = new ArrayList<>();
-                                    while (m.find()) {
-                                        list.add(Integer.parseInt(m.group()));
-                                    }
-                                    if (list.size() <= 1) {
-                                        return getDefaultRandomNumber();
-                                    }
-                                    list.sort(Comparator.naturalOrder());
-                                    final int min = list.get(0);
-                                    final int max = list.get(list.size() - 1);
-                                    return getRandomNumber(min, max);
                                 }
+                                list.sort(Comparator.naturalOrder());
+                                final int min = list.get(0);
+                                final int max = list.get(list.size() - 1);
+                                return getRandomNumber(min, max);
                             })
                             .map(text -> new SendMessage(chat.getId(), text))
                             .orElse(null);
@@ -80,6 +77,23 @@ public class PavelsLittleHelperBot extends TelegramWebhookBot {
             }
         }
         return null;
+    }
+
+    @Nonnull
+    private List<Integer> extractInts(@Nonnull final Matcher matcher) {
+        final List<Integer> list = new ArrayList<>();
+        while (matcher.find()) {
+            final int number;
+            final String token = matcher.group();
+            try {
+                number = Integer.parseInt(token);
+                list.add(number);
+            } catch (final NumberFormatException ex) {
+                // ignore
+                log.warn("Unable to parse following token into number: {}, skipping.", token);
+            }
+        }
+        return list;
     }
 
     @Nonnull
