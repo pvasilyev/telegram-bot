@@ -11,7 +11,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -68,5 +70,14 @@ public class PavelsLittleHelperBot extends TelegramWebhookBot {
     @Override
     public String getBotPath() {
         return getBotUsername();
+    }
+
+    public void echoDeployed() {
+        final long pavelGroupChatId = configuration.getPavelGroupChatId();
+        try {
+            execute(new SendMessage(pavelGroupChatId, "Deployed a new version of Pavel's TG Bot, server time: " + Instant.now()));
+        } catch (final TelegramApiException ex) {
+            log.error("Unable to publish message about successful deployment due to {}", ex.getMessage(), ex);
+        }
     }
 }

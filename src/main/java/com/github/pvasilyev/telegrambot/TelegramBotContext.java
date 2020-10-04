@@ -1,4 +1,4 @@
-package com.github.pvasilyev.telegrambot.webhook;
+package com.github.pvasilyev.telegrambot;
 
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
@@ -7,6 +7,8 @@ import com.amazonaws.services.secretsmanager.model.GetSecretValueResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pvasilyev.telegrambot.model.HelperBotConfiguration;
+import com.github.pvasilyev.telegrambot.webhook.PavelsLittleHelperBot;
+import com.github.pvasilyev.telegrambot.webhook.RandomNumberReplier;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,7 @@ import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.annotation.Nonnull;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
@@ -45,6 +48,7 @@ public class TelegramBotContext {
         try {
             final PavelsLittleHelperBot bot = pavelsBot(helperBotConfiguration);
             telegramBotsApi.registerBot(bot);
+            bot.echoDeployed();
 
             return telegramBotsApi;
         } catch (final TelegramApiException e) {
@@ -54,6 +58,7 @@ public class TelegramBotContext {
         }
     }
 
+    @Nonnull
     private HelperBotConfiguration retrieveBotConfiguration() {
         final String secretName = "tgbothelper-configuration";
         final String region = "us-east-1";
