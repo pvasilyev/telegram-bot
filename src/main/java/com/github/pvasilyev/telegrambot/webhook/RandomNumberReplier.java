@@ -41,8 +41,17 @@ public class RandomNumberReplier {
                     final Pattern pattern = Pattern.compile("-?\\d+");
                     final Matcher matcher = pattern.matcher(actualText.trim());
                     final List<Integer> list = extractInts(matcher);
-                    if (list.size() <= 1) {
+                    if (list.isEmpty()) {
                         return getDefaultRandomNumber();
+                    } else if (list.size() == 1) {
+                        final int boundary = list.get(0);
+                        if (boundary > 0) {
+                            return getRandomNumber(1, boundary);
+                        } else if (boundary < 0) {
+                            return getRandomNumber(boundary, -1);
+                        } else {
+                            return "0";
+                        }
                     }
                     list.sort(Comparator.naturalOrder());
                     final int min = list.get(0);

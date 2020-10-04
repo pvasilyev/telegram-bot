@@ -107,6 +107,24 @@ class RandomNumberReplierTest {
     }
 
     @Test
+    void givenBotCommandWith1PositiveNumber1_whenGetRandomNumber_expectSendMessageReturned() throws Exception {
+        final Message message = objectMapper.readValue("{\"text\":\"/random 3\",\"entities\":[{\"type\":\"bot_command\",\"offset\":0,\"length\":7}]}", Message.class);
+        final Chat chat = objectMapper.readValue("{\"id\":9988}", Chat.class);
+
+        assertThat(message.getText(), notNullValue());
+        assertThat(message.getEntities(), not(empty()));
+
+        final BotApiMethod<Message> randomNumber = randomNumberReplier.getRandomNumber(message, chat);
+
+        assertThat(randomNumber, notNullValue());
+        assertThat(randomNumber, instanceOf(SendMessage.class));
+        final SendMessage sendMessage = (SendMessage) randomNumber;
+        assertThat(sendMessage.getChatId(), is("9988"));
+        assertThat(sendMessage.getText(), hasLength(1));
+        assertThat(sendMessage.getText(), anyOf(is("1"), is("2"), is("3")));
+    }
+
+    @Test
     void givenBotCommandWith2NegativeNumbers_whenGetRandomNumber_expectSendMessageReturned() throws Exception {
         final Message message = objectMapper.readValue("{\"text\":\"/random -10 -14\",\"entities\":[{\"type\":\"bot_command\",\"offset\":0,\"length\":7}]}", Message.class);
         final Chat chat = objectMapper.readValue("{\"id\":5544}", Chat.class);
@@ -122,5 +140,41 @@ class RandomNumberReplierTest {
         assertThat(sendMessage.getChatId(), is("5544"));
         assertThat(sendMessage.getText(), hasLength(3));
         assertThat(sendMessage.getText(), anyOf(is("-10"), is("-11"), is("-12"), is("-13"), is("-14")));
+    }
+
+    @Test
+    void givenBotCommandWith1NegativeNumber_whenGetRandomNumber_expectSendMessageReturned() throws Exception {
+        final Message message = objectMapper.readValue("{\"text\":\"/random -4\",\"entities\":[{\"type\":\"bot_command\",\"offset\":0,\"length\":7}]}", Message.class);
+        final Chat chat = objectMapper.readValue("{\"id\":7766}", Chat.class);
+
+        assertThat(message.getText(), notNullValue());
+        assertThat(message.getEntities(), not(empty()));
+
+        final BotApiMethod<Message> randomNumber = randomNumberReplier.getRandomNumber(message, chat);
+
+        assertThat(randomNumber, notNullValue());
+        assertThat(randomNumber, instanceOf(SendMessage.class));
+        final SendMessage sendMessage = (SendMessage) randomNumber;
+        assertThat(sendMessage.getChatId(), is("7766"));
+        assertThat(sendMessage.getText(), hasLength(2));
+        assertThat(sendMessage.getText(), anyOf(is("-1"), is("-2"), is("-3"), is("-4")));
+    }
+
+    @Test
+    void givenBotCommandWith1ZeroNumber_whenGetRandomNumber_expectSendMessageReturned() throws Exception {
+        final Message message = objectMapper.readValue("{\"text\":\"/random 0\",\"entities\":[{\"type\":\"bot_command\",\"offset\":0,\"length\":7}]}", Message.class);
+        final Chat chat = objectMapper.readValue("{\"id\":4433}", Chat.class);
+
+        assertThat(message.getText(), notNullValue());
+        assertThat(message.getEntities(), not(empty()));
+
+        final BotApiMethod<Message> randomNumber = randomNumberReplier.getRandomNumber(message, chat);
+
+        assertThat(randomNumber, notNullValue());
+        assertThat(randomNumber, instanceOf(SendMessage.class));
+        final SendMessage sendMessage = (SendMessage) randomNumber;
+        assertThat(sendMessage.getChatId(), is("4433"));
+        assertThat(sendMessage.getText(), hasLength(1));
+        assertThat(sendMessage.getText(), is("0"));
     }
 }
