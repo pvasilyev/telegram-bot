@@ -65,7 +65,7 @@
     {
       "name": "selenium-standalone-firefox",
       "image": "selenium/standalone-firefox:4.4.0-20220812",
-      "memory": "512",
+      "memory": "1024",
       "cpu": "128",
       "resourceRequirements": null,
       "essential": false,
@@ -106,7 +106,7 @@
     }
   ],
   "placementConstraints": [],
-  "memory": "1024",
+  "memory": "1536",
   "taskRoleArn": "arn:aws:iam::571901509392:role/ecsTaskExecutionRole",
   "compatibilities": [
     "EC2",
