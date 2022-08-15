@@ -8,6 +8,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 
 import java.net.MalformedURLException;
@@ -22,6 +23,7 @@ import java.net.URL;
 public class SeleniumContext {
 
     @Bean
+    @Lazy
     @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public WebDriverManager getWebDriver() {
         final FirefoxOptions firefoxOptions = new FirefoxOptions();
