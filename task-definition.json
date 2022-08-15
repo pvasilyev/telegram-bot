@@ -4,16 +4,16 @@
   "containerDefinitions": [
     {
       "dnsSearchDomains": null,
+      "environmentFiles": [],
       "logConfiguration": {
         "logDriver": "awslogs",
-        "secretOptions": null,
         "options": {
           "awslogs-group": "/ecs/tgbot-deployment",
           "awslogs-region": "us-east-1",
           "awslogs-stream-prefix": "ecs"
         }
       },
-      "entryPoint": [],
+      "entryPoint": null,
       "portMappings": [
         {
           "hostPort": 8080,
@@ -26,22 +26,21 @@
           "containerPort": 8787
         }
       ],
-      "command": [],
+      "command": null,
       "linuxParameters": null,
-      "cpu": 1,
-      "environment": [],
+      "cpu": "128",
+      "environment": null,
       "resourceRequirements": null,
       "ulimits": null,
       "dnsServers": null,
-      "mountPoints": [],
+      "mountPoints": null,
       "workingDirectory": null,
       "secrets": null,
       "dockerSecurityOptions": null,
-      "memory": null,
-      "memoryReservation": null,
-      "volumesFrom": [],
+      "memory": "512",
+      "volumesFrom": null,
       "stopTimeout": null,
-      "image": "571901509392.dkr.ecr.us-east-1.amazonaws.com/tgbot-webhook-repository",
+      "image": "571901509392.dkr.ecr.us-east-1.amazonaws.com/tgbot-webhook-repository:latest",
       "startTimeout": null,
       "firelensConfiguration": null,
       "dependsOn": null,
@@ -49,7 +48,7 @@
       "interactive": null,
       "healthCheck": null,
       "essential": true,
-      "links": [],
+      "links": null,
       "hostname": null,
       "extraHosts": null,
       "pseudoTerminal": null,
@@ -58,11 +57,56 @@
       "dockerLabels": null,
       "systemControls": null,
       "privileged": null,
-      "name": "tgbot-container"
+      "name": "tgbot-container",
+      "repositoryCredentials": {
+        "credentialsParameter": ""
+      }
+    },
+    {
+      "name": "selenium-standalone-firefox",
+      "image": "selenium/standalone-firefox:4.4.0-20220812",
+      "memory": "512",
+      "cpu": "128",
+      "resourceRequirements": null,
+      "essential": false,
+      "portMappings": [
+        {
+          "containerPort": "4444",
+          "protocol": "tcp"
+        }
+      ],
+      "environment": null,
+      "environmentFiles": [],
+      "secrets": null,
+      "mountPoints": null,
+      "volumesFrom": null,
+      "hostname": null,
+      "user": null,
+      "workingDirectory": null,
+      "extraHosts": null,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/tgbot-deployment",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "ulimits": null,
+      "dockerLabels": null,
+      "dependsOn": [
+        {
+          "containerName": "tgbot-container",
+          "condition": "START"
+        }
+      ],
+      "repositoryCredentials": {
+        "credentialsParameter": ""
+      }
     }
   ],
   "placementConstraints": [],
-  "memory": "512",
+  "memory": "1024",
   "taskRoleArn": "arn:aws:iam::571901509392:role/ecsTaskExecutionRole",
   "compatibilities": [
     "EC2",
